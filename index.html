@@ -1,62 +1,152 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LiveChat — Auto Open</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Live Support</title>
+<style>
+  :root{
+    --ink:#0b1220;           /* text */
+    --muted:#64748b;         /* sub text */
+    --accentA:#60a5fa;       /* blue */
+    --accentB:#34d399;       /* green */
+    --accentC:#a78bfa;       /* violet */
+    --paper:#fbfcff;         /* background */
+    --grid:#e9eef7;          /* hairline dots */
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; display:grid; place-items:center; padding:32px;
+    color:var(--ink); font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial;
+    background:
+      radial-gradient(var(--grid) 1px, transparent 1px) 0 0/22px 22px,
+      linear-gradient(180deg,#ffffff, var(--paper));
+    position:relative;
+  }
+  /* Thin gradient top bar for a crisp accent */
+  body::before{
+    content:""; position:fixed; left:0; right:0; top:0; height:3px;
+    background: linear-gradient(90deg,var(--accentA),var(--accentB),var(--accentC));
+  }
+
+  .wrap{ text-align:center; max-width:720px; width:92% }
+  h1{
+    margin:0 0 10px; font-size:clamp(28px,3.6vw,46px); font-weight:900; letter-spacing:.2px;
+  }
+  /* soft “marker” highlight under one word */
+  .mark{
+    background: linear-gradient(0deg, transparent 60%, rgba(96,165,250,.22) 60% 100%);
+    padding:0 .08em;
+  }
+  p{ margin:0; color:var(--muted); line-height:1.55 }
+
+  /* ultra-minimal toggle link */
+  .reopen{
+    display:inline-block; margin-top:14px; color:var(--ink); text-decoration:none; font-weight:700;
+    border-bottom:2px solid transparent; padding-bottom:2px;
+    background-image: linear-gradient(90deg,var(--accentA),var(--accentB),var(--accentC));
+    background-size: 100% 2px; background-repeat:no-repeat; background-position:0 100%;
+    transition: opacity .15s ease;
+  }
+  .reopen:hover{ opacity:.85 }
+
+  .hint{ margin-top:8px; font-size:12px; color:#8a9ab1 }
+  code{ background:#eef2ff; border:1px solid #e2e8f0; padding:.15em .35em; border-radius:6px }
+
+  @media (max-width:420px){ .hint{ display:none } }
+</style>
 </head>
 <body>
 
-  <!-- LiveChat v2 snippet -->
+  <main class="wrap" role="main" aria-live="polite">
+    <h1>Connecting you to <span class="mark">live Support</span></h1>
+    <p>If the chat doesn’t appear in a moment, you can use the button below.</p>
+    <a id="reopen" class="reopen" href="#" aria-label="Open chat">Open chat ↗</a>
+    <div class="hint">Prefill a draft message with <code>?msg=Hello%20team</code></div>
+  </main>
+
+  <!-- LiveChat v2 snippet (keep your license id) -->
   <script>
     window.__lc = window.__lc || {};
-    window.__lc.license = 14648400; // your license
-
+    window.__lc.license = 14648400;
     (function(n,t,c){
-      function i(n){ return e._h ? e._h.apply(null,n) : e._q.push(n) }
-      var e = {
-        _q:[], _h:null, _v:"2.0",
-        on:function(){ i(["on", c.call(arguments)]) },
-        once:function(){ i(["once", c.call(arguments)]) },
-        off:function(){ i(["off", c.call(arguments)]) },
-        get:function(){ if(!e._h) throw new Error("[LiveChatWidget] You can't use getters before load."); return i(["get", c.call(arguments)]) },
-        call:function(){ i(["call", c.call(arguments)]) },
-        init:function(){
-          var s = t.createElement("script");
-          s.async = true; s.type = "text/javascript";
-          s.src = "https://cdn.livechatinc.com/tracking.js";
-          t.head.appendChild(s);
-        }
-      };
-      !n.__lc.asyncInit && e.init();
-      n.LiveChatWidget = n.LiveChatWidget || e;
-    })(window, document, [].slice);
+      function i(n){return e._h?e._h.apply(null,n):e._q.push(n)}
+      var e={_q:[],_h:null,_v:"2.0",on:function(){i(["on",c.call(arguments)])},
+      once:function(){i(["once",c.call(arguments)])},off:function(){i(["off",c.call(arguments)])},
+      get:function(){if(!e._h)throw new Error("[LiveChatWidget] You can't use getters before load.");return i(["get",c.call(arguments)])},
+      call:function(){i(["call",c.call(arguments)])},init:function(){var s=t.createElement("script");s.async=!0;s.type="text/javascript";
+      s.src="https://cdn.livechatinc.com/tracking.js";t.head.appendChild(s)}};
+      !n.__lc.asyncInit && e.init(); n.LiveChatWidget=n.LiveChatWidget||e;
+    })(window,document,[].slice);
   </script>
 
   <noscript>
-    <a href="https://www.livechatinc.com/chat-with/14648400/" rel="nofollow">Chat with us</a>,
-    powered by <a href="https://www.livechatinc.com/?welcome" rel="noopener nofollow" target="_blank">LiveChat</a>
+    <p style="position:fixed;left:22px;top:12px;background:#111;color:#fff;padding:8px 12px;border-radius:10px">
+      <a href="https://www.livechatinc.com/chat-with/14648400/" rel="nofollow" style="color:#a7f3d0">Open chat</a>
+      (enable JavaScript for best experience)
+    </p>
   </noscript>
 
-  <!-- Auto-open the chat as soon as the widget is ready -->
+  <!-- Auto-open first time + toggle open/close -->
   <script>
-    // Optional: allow pre-filling a draft via ?msg=Your+text
-    function urlDraft() {
+    const AUTO_KEY = 'LC_firstOpen_14648400'; // scoped to your license id
+    const btn = document.getElementById('reopen');
+    let isOpen = false;    // current widget state (maximized/minimized)
+    let busy  = false;     // small debounce to avoid double taps
+
+    function draftFromURL(){
       try { return new URLSearchParams(location.search).get('msg') || ""; }
       catch { return ""; }
     }
+    function setBtn(open){
+      isOpen = !!open;
+      btn.textContent = open ? 'Close chat ×' : 'Open chat ↗';
+      btn.setAttribute('aria-label', open ? 'Close chat' : 'Open chat');
+    }
+    function openChat(draft){
+      if(draft){ LiveChatWidget.call('maximize', { messageDraft: draft }); }
+      else{ LiveChatWidget.call('maximize'); }
+    }
+    function closeChat(){
+      LiveChatWidget.call('minimize');
+    }
 
+    // Wire up once widget is ready
     LiveChatWidget.on('ready', function () {
-      const draft = urlDraft();
-      if (draft) {
-        LiveChatWidget.call('maximize', { messageDraft: draft });
+      // Keep the page clean (use our control instead of the launcher bubble)
+      LiveChatWidget.call('hide');
+
+      // Reflect visibility changes (user may click the widget close button)
+      LiveChatWidget.on('visibility_changed', function(data){
+        const v = (data && (data.state || data.visibility)) || '';
+        setBtn(v === 'maximized');
+      });
+
+      // Auto-open only on first visit
+      const firstTime = !localStorage.getItem(AUTO_KEY);
+      if (firstTime) {
+        openChat(draftFromURL());
+        localStorage.setItem(AUTO_KEY, '1');
       } else {
-        LiveChatWidget.call('maximize');
+        // ensure minimized on subsequent loads
+        closeChat();
+        setBtn(false);
       }
-      // If you don't want the floating bubble visible after opening, uncomment:
-      // LiveChatWidget.call('hide');
+    });
+
+    // Toggle handler
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      if (busy) return;
+      busy = true;
+
+      if (isOpen) closeChat(); else openChat();
+
+      setTimeout(() => busy = false, 350);
     });
   </script>
 
 </body>
 </html>
+
