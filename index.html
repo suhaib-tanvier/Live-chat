@@ -1,183 +1,62 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Live Support</title>
-<style>
-  :root{
-    --ink:#0b1220; --muted:#64748b;
-    --accentA:#60a5fa; --accentB:#34d399; --accentC:#a78bfa;
-    --paper:#fbfcff; --grid:#e9eef7;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0; display:grid; place-items:center; padding:32px;
-    color:var(--ink); font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial;
-    background:
-      radial-gradient(var(--grid) 1px, transparent 1px) 0 0/22px 22px,
-      linear-gradient(180deg,#ffffff, var(--paper));
-    position:relative;
-  }
-  body::before{
-    content:""; position:fixed; left:0; right:0; top:0; height:3px;
-    background: linear-gradient(90deg,var(--accentA),var(--accentB),var(--accentC));
-  }
-
-  .wrap{ text-align:center; max-width:720px; width:92% }
-  h1{ margin:0 0 10px; font-size:clamp(28px,3.6vw,46px); font-weight:900; letter-spacing:.2px }
-  .mark{ background: linear-gradient(0deg, transparent 60%, rgba(96,165,250,.22) 60% 100%); padding:0 .08em }
-  p{ margin:0; color:var(--muted); line-height:1.55 }
-
-  .reopen{
-    display:inline-block; margin-top:14px; color:var(--ink); text-decoration:none; font-weight:700;
-    border-bottom:2px solid transparent; padding-bottom:2px;
-    background-image: linear-gradient(90deg,var(--accentA),var(--accentB),var(--accentC));
-    background-size:100% 2px; background-repeat:no-repeat; background-position:0 100%;
-    transition: opacity .15s ease;
-  }
-  .reopen:hover{ opacity:.85 }
-  .hint{ margin-top:8px; font-size:12px; color:#8a9ab1 }
-
-  /* ===== Overlay (keeps same tab + same URL) ===== */
-  .overlay{
-    position:fixed; inset:0; display:none; place-items:center;
-    background:rgba(10,15,25,.55); backdrop-filter: blur(6px) saturate(1.05);
-    z-index: 2147483647;
-  }
-  .overlay.show{ display:grid }
-  .sheet{
-    position:relative; width:min(1200px, 96vw); height:min(86vh, 900px);
-    border-radius:16px; overflow:hidden; background:#000;
-    border:1px solid rgba(255,255,255,.35);
-    box-shadow:0 30px 80px rgba(2,6,23,.35);
-  }
-  .sheet::before{
-    content:""; position:absolute; inset:-1px; border-radius:18px; padding:1.25px;
-    background:linear-gradient(120deg,var(--accentA),var(--accentB),var(--accentC));
-    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none;
-  }
-  .frame{ width:100%; height:100%; border:0; background:#0b1220 }
-  .close{
-    position:absolute; top:10px; right:10px; height:36px; width:36px; border-radius:10px;
-    display:grid; place-items:center; font-weight:900; cursor:pointer; user-select:none;
-    background:rgba(255,255,255,.9); border:1px solid rgba(0,0,0,.06); color:#0b1220;
-    box-shadow:0 6px 18px rgba(2,6,23,.15);
-  }
-  .close:active{ transform:translateY(1px) }
-  .fallback{
-    position:absolute; inset:auto 12px 12px auto; font-size:12px;
-    background:rgba(255,255,255,.92); padding:6px 10px; border-radius:8px; color:#0b1220;
-    display:none;
-  }
-  .fallback a{ color:#0b1220; font-weight:700; text-decoration:underline }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Support</title>
+  <style>
+    /* keep it truly blank */
+    html,body{height:100%;margin:0;background:#ffffff}
+  </style>
 </head>
 <body>
 
-  <main class="wrap" role="main" aria-live="polite">
-    <h1>Connecting you to <span class="mark">live Support</span></h1>
-    <p>If the chat doesn’t appear in a moment, you can use the button below.</p>
+  <!-- LiveChat v2 snippet -->
+  <script>
+    window.__lc = window.__lc || {};
+    window.__lc.license = 14648400; // <-- your license id
+    (function(n,t,c){
+      function i(n){return e._h?e._h.apply(null,n):e._q.push(n)}
+      var e={
+        _q:[],_h:null,_v:"2.0",
+        on:function(){i(["on",c.call(arguments)])},
+        once:function(){i(["once",c.call(arguments)])},
+        off:function(){i(["off",c.call(arguments)])},
+        get:function(){if(!e._h)throw new Error("[LiveChatWidget] You can't use getters before load.");return i(["get",c.call(arguments)])},
+        call:function(){i(["call",c.call(arguments)])},
+        init:function(){
+          var s=t.createElement("script");
+          s.async=true; s.type="text/javascript";
+          s.src="https://cdn.livechatinc.com/tracking.js";
+          t.head.appendChild(s);
+        }
+      };
+      !n.__lc.asyncInit && e.init();
+      n.LiveChatWidget = n.LiveChatWidget || e;
+    })(window,document,[].slice);
+  </script>
 
-    <!-- Optional: a manual trigger you can keep or remove -->
-    <a id="reopen" class="reopen" href="#" data-livechat-portal="https://live-chat-ruddy.vercel.app/">Open chat ↗</a>
-
-    <div class="hint">Clicks on live-chat links are opened <b>in-page</b>. URL stays the same.</div>
-  </main>
-
-  <!-- Overlay container -->
-  <div id="chatOverlay" class="overlay" aria-hidden="true">
-    <div class="sheet" role="dialog" aria-label="Live Chat Portal">
-      <button id="closeOverlay" class="close" aria-label="Close">×</button>
-      <iframe id="chatFrame" class="frame" src=""></iframe>
-      <div id="fallbackMsg" class="fallback">
-        Having trouble loading? <a id="fallbackLink" target="_blank" rel="noopener">Open in new tab</a>
-      </div>
-    </div>
-  </div>
-
-<script>
-  // === Configure the domains that should open in the overlay (no navigation) ===
-  const PORTAL_ALLOWLIST = [
-    'live-chat-ruddy.vercel.app',        // your Vercel portal
-    'livehelp.global-serve.com'          // example other live chat host
-  ];
-
-  // Elements
-  const overlay = document.getElementById('chatOverlay');
-  const iframe  = document.getElementById('chatFrame');
-  const closeBtn= document.getElementById('closeOverlay');
-  const fallback= document.getElementById('fallbackMsg');
-  const fallbackLink = document.getElementById('fallbackLink');
-
-  // Helpers
-  function sameHostAllowed(url){
-    try{
-      const h = new URL(url, location.href).host.toLowerCase();
-      return PORTAL_ALLOWLIST.some(d => h.endsWith(d.toLowerCase()));
-    }catch{ return false; }
-  }
-  function withModifiers(e){
-    return e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button === 1;
-  }
-  function openOverlay(url){
-    // prevent background scroll
-    document.documentElement.style.overflow = 'hidden';
-    document.body.style.overflow = 'hidden';
-
-    overlay.classList.add('show');
-    overlay.setAttribute('aria-hidden','false');
-    iframe.src = url;
-    fallbackLink.href = url;
-
-    // show a subtle fallback link in case the site blocks iframes
-    fallback.style.display = 'none';
-    setTimeout(()=>{ fallback.style.display = 'block'; }, 1200);
-  }
-  function closeOverlay(){
-    overlay.classList.remove('show');
-    overlay.setAttribute('aria-hidden','true');
-    iframe.src = 'about:blank';
-    document.documentElement.style.overflow = '';
-    document.body.style.overflow = '';
-  }
-
-  // 1) Intercept ANY click on the page that points to an allowlisted domain
-  document.addEventListener('click', function(ev){
-    const a = ev.target.closest('a[href], [data-livechat-portal]');
-    if(!a) return;
-
-    const url = a.getAttribute('data-livechat-portal') || a.getAttribute('href');
-    if(!url) return;
-
-    // Respect modifier/middle-clicks (let user open in new tab if they want)
-    if(withModifiers(ev)) return;
-
-    if(sameHostAllowed(url)){
-      ev.preventDefault();
-      openOverlay(url);
+  <!-- Auto-open immediately on load (optional: accept ?msg= draft) -->
+  <script>
+    function draftFromURL(){
+      try { return new URLSearchParams(location.search).get('msg') || ""; }
+      catch { return ""; }
     }
-  }, { capture:true });
+    LiveChatWidget.on('ready', function () {
+      const draft = draftFromURL();
+      if (draft) {
+        LiveChatWidget.call('maximize', { messageDraft: draft });
+      } else {
+        LiveChatWidget.call('maximize');
+      }
+      // If you want to hide the launcher bubble after opening, uncomment:
+      // LiveChatWidget.call('hide');
+    });
+  </script>
 
-  // 2) Close handlers
-  closeBtn.addEventListener('click', closeOverlay);
-  overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closeOverlay(); });
-  window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && overlay.classList.contains('show')) closeOverlay(); });
-
-  // 3) If your Copilot message renders a plain URL, no extra markup is needed:
-  //    the global click handler above will catch it and open the overlay.
-  //
-  //    If you CAN customize the link in the message, prefer:
-  //    <a href="https://live-chat-ruddy.vercel.app/" data-livechat-portal>Talk to a human</a>
-  //
-  //    If the chat is rendered inside a cross-origin <iframe>, the host page
-  //    cannot intercept its clicks. In that case, change the action to open a
-  //    harmless URL on THIS page (e.g., "#open-livechat") and use postMessage
-  //    or a host-side control to trigger openOverlay(...) instead.
-</script>
-
+  <noscript>
+    <a href="https://www.livechatinc.com/chat-with/14648400/" rel="nofollow">Open chat</a>
+  </noscript>
 </body>
 </html>
 
